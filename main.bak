@@ -1,0 +1,93 @@
+/*
+    This program is supposed to act like a simplified version of the file system
+*/
+
+#include "trie.h"
+#include "shell.h"
+
+int display_menu(){
+    int input = -1;
+    cout << "0. Exit\n";
+    cout << "1. Create file\n";
+    cout << "2. Create folder\n";
+    cout << "3. List files\n";
+    cout << "4. Move\n";
+    cout << "5. Search by name\n";
+    cout << "?:";
+    cin >> input;
+    return input;   
+}
+
+int main(){
+
+    const int CREATE_FILE = 1;
+    const int CREATE_FOLDER = 2;
+    const int LIST_DIR = 3;
+    const int MOVE = 4;
+    const int SEARCH = 5;
+    const int CLS = 6;
+
+    Trie file_system;
+    Shell shell;
+
+    Node* cur_pos = file_system.root;
+    int choice = -1;
+    string name = "";
+
+    do{
+        system("cls");
+        choice = display_menu();
+
+        switch(choice){
+
+            case EXIT_SUCCESS:
+                break;
+
+            case CREATE_FILE:
+                cout << "File name: ";
+                cin >> name;
+                file_system.create_file(name, cur_pos);
+                break;
+
+            case CREATE_FOLDER:
+                cout << "Folder name: ";
+                cin >> name;
+                file_system.create_folder(name, cur_pos);
+                break;
+
+            case LIST_DIR:
+                file_system.display(cur_pos);               
+                cin.get();
+                cin.get();
+                break;
+
+            case MOVE:
+                file_system.display(cur_pos);
+                cout << "\nWhere to move?: ";
+                cin >> name;
+                cur_pos = file_system.move(cur_pos, name);
+                break;
+
+            case SEARCH:
+                cout << "What do you want to search?: ";
+                cin >> name;
+                file_system.search(file_system.root, name);
+                cin.get();
+                cin.get();
+                break;
+
+            case CLS:
+                system("cls");
+                break;
+
+            default:
+                cout << RED << "Command not found" << RESET;
+                cin.get();
+                cin.get();
+
+        }
+
+    }while(choice != EXIT_SUCCESS);
+
+    return 0;
+}
