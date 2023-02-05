@@ -83,7 +83,7 @@ int main(){
                 {
 
                     name = *it;
-                    cur_pos = file_system.move(cur_pos, name, &shell);
+                    cur_pos = file_system.change_dir(cur_pos, name, &shell);
                     it++;
 
                 }while((it = shell.get_next_argument(it)) != shell.get_args_end());

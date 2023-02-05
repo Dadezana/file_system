@@ -19,6 +19,8 @@ struct Node{
 
 class Trie{
 
+    vector<string> path_component;
+
     public:
         string path = "/";
 
@@ -31,7 +33,7 @@ class Trie{
         void search(Node* pos, string name, string path="");    // if path is empy the root is taken
         void display(Node* pos);
         
-        Node* move(Node* cur_pos, string name, Shell* shell);
+        Node* change_dir(Node* cur_pos, string name, Shell* shell);
 };
 
 #endif

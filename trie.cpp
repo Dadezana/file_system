@@ -53,7 +53,7 @@ void Trie::display(Node* cur_pos){
 }
 
 // Move into the specified folder
-Node* Trie::move(Node* cur_pos, string folder, Shell* shell){
+Node* Trie::change_dir(Node* cur_pos, string folder, Shell* shell){
     
     if(cur_pos == nullptr) return cur_pos;
 
