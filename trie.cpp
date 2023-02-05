@@ -9,6 +9,7 @@ void Trie::create_file(string name, Node* pos)
     pos->children.push_back(newNode);
 }
 
+
 void Trie::create_folder(string name, Node* pos)
 {
     if(name == "") return;
@@ -16,6 +17,33 @@ void Trie::create_folder(string name, Node* pos)
     newNode->parent = pos;
     pos->children.push_back(newNode);
 }
+
+
+void Trie::mkdir(string name, Node* pos, bool want_to_create_file)
+{
+    if(name.empty()) return;
+
+    string folder = name;
+    split_component(name);
+    
+    // if a path is specified instead of the folder name only
+    if(path_component.size() > 1)
+    {
+        
+        folder = path_component.back();     // get the folder name
+        path_component.pop_back();          // and remove it from the vector
+
+        for(string dir : path_component){
+            pos = change_dir(pos, dir);
+        }
+    }
+    
+    if(want_to_create_file) 
+        create_file(folder, pos);
+    else 
+        create_folder(folder, pos);
+}
+
 
 // Search for a file across all file system
 void Trie::search(Node* pos, string name, string path){
@@ -57,13 +85,19 @@ Node* Trie::change_dir(Node* cur_pos, string folder, Shell* shell){
     
     if(cur_pos == nullptr) return cur_pos;
 
+    bool restore_path = (shell == nullptr);   // useful to know wether we are moving just to create a file/folder or the user used 'cd' command
+
     // if '..' is typed move to the parent directory
     if(folder.compare("..") == 0){
         if(cur_pos->name == "/") return cur_pos;
-        path = path.substr(0, path.size() - 1);         // remove the last char "/"
-        path = path.substr(0, path.find_last_of("/"));  // remove the current folder from the path
-        path += "/";                                    // re-add the final "/"
-        shell->set_path(this->path);
+        if(!restore_path)
+        {
+            path = path.substr(0, path.size() - 1);             // remove the last char "/"
+            path = path.substr(0, path.find_last_of("/"));      // remove the current folder from the path
+            path += "/";                                        // re-add the final "/"
+            shell->set_path(this->path);
+        }
+                                         
         return cur_pos->parent;
     }
 
@@ -77,8 +111,11 @@ Node* Trie::change_dir(Node* cur_pos, string folder, Shell* shell){
                 return cur_pos;
             }
             cur_pos = child;
-            path += cur_pos->name + "/";
-            shell->set_path(this->path);  
+            if(!restore_path)
+            {
+                path += cur_pos->name + "/";
+                shell->set_path(this->path);  
+            }
             return cur_pos;
         }
     }
@@ -87,9 +124,9 @@ Node* Trie::change_dir(Node* cur_pos, string folder, Shell* shell){
     return cur_pos;
 }
 
-/* 
+/**
     Take the path given ("/folder1/folder2/"), remove the "/" and store every single folder name into the 'path_component' vector.
-    Then it calls, as many times as the folder in path_component, the change_dir() function to effectively change the directory.
+    Then it calls, as many times as the folders in path_component, the change_dir() function to effectively change the directory.
     @param path path to split 
 */
 Node* Trie::change_directory(Node* cur_pos, string path, Shell* shell)
@@ -105,7 +142,6 @@ Node* Trie::change_directory(Node* cur_pos, string path, Shell* shell)
         cur_pos = change_dir(cur_pos, folder, shell);
     }
 
-    path_component.clear();
     return cur_pos;
 
 }
@@ -113,6 +149,9 @@ Node* Trie::change_directory(Node* cur_pos, string path, Shell* shell)
 
 // Split the path into subfolders and save the result in path_component vector
 void Trie::split_component(string path){
+
+    path_component.clear();
+
     char first_char = path[0];
     if(first_char == '/'){
         path = path.substr(1);                  // remove the first "/"

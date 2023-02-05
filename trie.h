@@ -23,7 +23,10 @@ class Trie{
         vector<string> path_component;
         void split_component(string path);
         
-        Node* change_dir(Node* cur_pos, string name, Shell* shell);
+        Node* change_dir(Node* cur_pos, string name, Shell* shell=nullptr);
+
+        void create_folder(string name, Node* pos);
+        void create_file(string name, Node* pos);
 
     public:
         string path = "/";  // path the user is currently in
@@ -31,13 +34,12 @@ class Trie{
         Node* root;
         Trie() : root(new Node("/", true)) {};
         
-        void create_folder(string name, Node* pos);
-        void create_file(string name, Node* pos);
+        void mkdir(string name, Node* pos, bool want_to_create_file=false);
         
         void search(Node* pos, string name, string path="");    // if path is empy the root is taken
         void display(Node* pos);
         
-        Node* change_directory(Node* cur_pos, string path, Shell* shell);
+        Node* change_directory(Node* cur_pos, string path, Shell* shell=nullptr);
 };
 
 #endif

@@ -49,12 +49,14 @@ int main(){
             case Shell::CREATE_FILE:
                 
                 it = shell.get_next_argument();
+                if(it == shell.get_args_end()) break;
+
                 do
                 {
                     if(it == shell.get_args_end()) break;
                     
                     name = *it;
-                    file_system.create_file(name, cur_pos);
+                    file_system.mkdir(name, cur_pos, true);
                     it++;
 
                 }while((it = shell.get_next_argument(it)) != shell.get_args_end());
@@ -63,10 +65,12 @@ int main(){
             case Shell::CREATE_FOLDER:
 
                 it = shell.get_next_argument();
+                if(it == shell.get_args_end()) break;
+
                 do
                 {
                     name = *it;
-                    file_system.create_folder(name, cur_pos);
+                    file_system.mkdir(name, cur_pos);
                     it++;
 
                 }while((it = shell.get_next_argument(it)) != shell.get_args_end());
@@ -79,6 +83,8 @@ int main(){
             case Shell::CHANGE_DIR:
 
                 it = shell.get_next_argument();
+                if(it == shell.get_args_end()) break;
+
                 do
                 {
 
@@ -92,6 +98,7 @@ int main(){
             case Shell::SEARCH:
                 
                 it = shell.get_next_argument();
+                if(it == shell.get_args_end()) break;
                 do
                 {
                     
