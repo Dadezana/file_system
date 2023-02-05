@@ -65,6 +65,43 @@ void Trie::search(Node* pos, string name, string path){
     }
 }
 
+// delete a folder. The name needs to be specified only during the first call
+void Trie::rm(Node* pos, string name){
+    
+    if(pos == nullptr) return;
+
+    string folder = name;
+    split_component(name);
+    
+    // if a path is specified instead of the folder name only
+    if(path_component.size() > 1)
+    {
+        
+        folder = path_component.back();     // get the folder name
+        path_component.pop_back();          // and remove it from the vector
+
+        for(string dir : path_component){
+            pos = change_dir(pos, dir);
+        }
+    }
+    
+    vector<Node*>::iterator it = pos->children.begin();
+
+    if(!folder.empty())
+    {
+        while(it != pos->children.end())
+        {
+            if((*it)->name == folder)
+            {
+                pos->children.erase(it);
+                break;
+            }
+            it++;
+        }
+    }
+
+}
+
 // Display files in current position
 void Trie::display(Node* cur_pos){
 

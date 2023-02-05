@@ -35,6 +35,7 @@ class Trie{
         Trie() : root(new Node("/", true)) {};
         
         void mkdir(string name, Node* pos, bool want_to_create_file=false);
+        void rm(Node* pos, string name="");
         
         void search(Node* pos, string name, string path="");    // if path is empy the root is taken
         void display(Node* pos);

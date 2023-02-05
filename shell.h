@@ -5,6 +5,7 @@
 #include <string>
 #include "utils.h"
 #include <vector>
+#include <map>
 using namespace std;
 
 class Shell{
@@ -16,6 +17,8 @@ class Shell{
 
     void split_arguments(string args);
 
+    map<string, int> cmds;
+
     public:
         static const size_t NOT_FOUND = string::npos;
         static const int CREATE_FILE = 1;
@@ -24,6 +27,7 @@ class Shell{
         static const int CHANGE_DIR = 4;
         static const int SEARCH = 5;
         static const int CLS = 6;
+        static const int RM = 7;
         static const int EMPTY_INPUT = -2;
 
         Shell();

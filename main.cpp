@@ -113,6 +113,19 @@ int main(){
                 system("cls");
                 break;
 
+            case Shell::RM:
+                it = shell.get_next_argument();
+                if(it == shell.get_args_end()) break;
+                do
+                {
+                    
+                    name = *it;
+                    file_system.rm(cur_pos, name);
+                    it++;
+
+                }while( (it = shell.get_next_argument(it)) != shell.get_args_end() );
+                break;
+
             case Shell::EMPTY_INPUT:
                 break;
 

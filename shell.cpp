@@ -3,6 +3,14 @@
 
 Shell::Shell(){
     path = "/";
+    cmds.insert({"exit", 0});
+    cmds.insert({"touch", 1});
+    cmds.insert({"mkdir", 2});
+    cmds.insert({"ls", 3});
+    cmds.insert({"cd", 4});
+    cmds.insert({"find", 5});
+    cmds.insert({"cls", 6});
+    cmds.insert({"rm", 7});
 }
 
 // Split the command given. Assigns the command to `command` variable, and all the arguments to the `args` vector
@@ -69,26 +77,8 @@ int Shell::get_command() {
         return EMPTY_INPUT;
     }
 
-    if(command.compare("exit") == 0){
-        return 0;
-    }
-    else if(command.compare("touch") == 0){
-        return 1;
-    }
-    else if(command.compare("mkdir") == 0){
-        return 2;
-    }
-    else if(command.compare("ls") == 0){
-        return 3;
-    }
-    else if(command.compare("cd") == 0){
-        return 4;
-    }
-    else if(command.compare("find") == 0){
-        return 5;
-    }
-    else if (command.compare("cls") == 0){
-        return 6;
+    if(cmds.find(command) != cmds.end()){
+        return cmds[command];
     }
 
     return -1; 
