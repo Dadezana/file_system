@@ -19,10 +19,14 @@ struct Node{
 
 class Trie{
 
-    vector<string> path_component;
+    private:
+        vector<string> path_component;
+        void split_component(string path);
+        
+        Node* change_dir(Node* cur_pos, string name, Shell* shell);
 
     public:
-        string path = "/";
+        string path = "/";  // path the user is currently in
 
         Node* root;
         Trie() : root(new Node("/", true)) {};
@@ -33,7 +37,7 @@ class Trie{
         void search(Node* pos, string name, string path="");    // if path is empy the root is taken
         void display(Node* pos);
         
-        Node* change_dir(Node* cur_pos, string name, Shell* shell);
+        Node* change_directory(Node* cur_pos, string path, Shell* shell);
 };
 
 #endif

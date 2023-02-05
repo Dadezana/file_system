@@ -86,3 +86,60 @@ Node* Trie::change_dir(Node* cur_pos, string folder, Shell* shell){
     cout << RED << "\"" << folder << "\" does not exists\n" << RESET;
     return cur_pos;
 }
+
+/* 
+    Take the path given ("/folder1/folder2/"), remove the "/" and store every single folder name into the 'path_component' vector.
+    Then it calls, as many times as the folder in path_component, the change_dir() function to effectively change the directory.
+    @param path path to split 
+*/
+Node* Trie::change_directory(Node* cur_pos, string path, Shell* shell)
+{
+    if(path.empty()) return cur_pos;
+
+    if(path.find("/") == Shell::NOT_FOUND)
+        return change_dir(cur_pos, path, shell);
+
+    split_component(path);
+
+    for(string folder : path_component){
+        cur_pos = change_dir(cur_pos, folder, shell);
+    }
+
+    path_component.clear();
+    return cur_pos;
+
+}
+
+
+// Split the path into subfolders and save the result in path_component vector
+void Trie::split_component(string path){
+    char first_char = path[0];
+    if(first_char == '/'){
+        path = path.substr(1);                  // remove the first "/"
+    }
+
+    char last_char = path.back();
+    if(last_char == '/'){
+        path = path.substr(0, path.size()-1);   // remove the last "/"
+    }
+
+    size_t pos;
+    string token = "";
+    // find the arguments
+    while (!path.empty())
+    {
+        pos = path.find("/");
+        if(pos == Shell::NOT_FOUND)            // if there are no more slashes 
+        {
+            if(path.empty()) break;            // and the string is no empty
+
+            path_component.push_back(path);        // it means it's an argument
+            break;
+        }    
+        
+        token = path.substr(0, pos);
+        path = path.substr(++pos);
+
+        path_component.push_back(token);
+    }
+}

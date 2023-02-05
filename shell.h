@@ -9,7 +9,6 @@ using namespace std;
 
 class Shell{
 
-    const size_t NOT_FOUND = string::npos;
     const std::streamsize MAX_CMD_LEN = 50;
     string command;
     vector<string> args;
@@ -18,7 +17,7 @@ class Shell{
     void split_arguments(string args);
 
     public:
-
+        static const size_t NOT_FOUND = string::npos;
         static const int CREATE_FILE = 1;
         static const int CREATE_FOLDER = 2;
         static const int LIST_DIR = 3;
