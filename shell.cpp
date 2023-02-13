@@ -2,6 +2,7 @@
 
 
 Shell::Shell(){
+
     path = "/";
     cmds.insert({"exit", 0});
     cmds.insert({"touch", 1});
@@ -29,8 +30,10 @@ void Shell::split_arguments(string cmd){
     // take the command
     pos = cmd.find(" ");
 
-    if(pos == NOT_FOUND)
+    if(pos == NOT_FOUND){
+        command = cmd;
         return;
+    }
 
     command = cmd.substr(0, pos);
     cmd = cmd.substr(++pos);
@@ -96,9 +99,4 @@ vector<string>::iterator Shell::get_args_end() {
 void Shell::set_path(string path)
 {
     this->path = path;
-}
-
-void Shell::wait_for_command(){
-    getline(cin, command);
-    split_arguments(command);
 }

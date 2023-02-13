@@ -4,19 +4,8 @@
 
 #include "trie.h"
 #include "shell.h"
+#include "utils.h"
 
-int display_menu(){
-    int input = -1;
-    cout << "0. Exit\n";
-    cout << "1. Create file\n";
-    cout << "2. Create folder\n";
-    cout << "3. List files\n";
-    cout << "4. Move\n";
-    cout << "5. Search by name\n";
-    cout << "?:";
-    cin >> input;
-    return input;   
-}
 
 int main(){
 
@@ -38,7 +27,8 @@ int main(){
 
     do{
         shell.type_prompt();
-        shell.wait_for_command();
+        // split command
+        shell.split_arguments( get_command(&file_system) );
 
         switch(shell.get_command()){
 
@@ -103,7 +93,7 @@ int main(){
                 {
                     
                     name = *it;
-                    file_system.search(file_system.root, name);
+                    file_system.find(file_system.root, name);
                     it++;
 
                 }while( (it = shell.get_next_argument(it)) != shell.get_args_end() );

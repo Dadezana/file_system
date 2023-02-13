@@ -1,5 +1,18 @@
 #include "trie.h"
 
+Trie::Trie(){
+    _root = new Char('/');
+    insert_command("exit");
+    insert_command("touch");
+    insert_command("mkdir");
+    insert_command("ls");
+    insert_command("cd");
+    insert_command("find");
+    insert_command("cls");
+    insert_command("rm");
+
+    root = new Node("/", true);
+}
 
 void Trie::create_file(string name, Node* pos)
 {
@@ -46,7 +59,7 @@ void Trie::mkdir(string name, Node* pos, bool want_to_create_file)
 
 
 // Search for a file across all file system
-void Trie::search(Node* pos, string name, string path){
+void Trie::find(Node* pos, string name, string path){
 
     if(pos == nullptr) return;
     if(pos->children.empty()) return;     // leaf node, so no other node needs to be checked
@@ -61,7 +74,7 @@ void Trie::search(Node* pos, string name, string path){
                 cout << "/";
         }
 
-        search(child, name, path+"/"+child->name);
+        find(child, name, path+"/"+child->name);
     }
 }
 
@@ -218,4 +231,94 @@ void Trie::split_component(string path){
 
         path_component.push_back(token);
     }
+}
+
+
+//* AUTO-COMPLETITION
+
+
+/// @brief Search for a word inside the trie 
+/// @return A pointer to the end of the word searched
+Char* Trie::search(Char* node, string word)
+{
+    if(node == nullptr) return node;
+
+    char ch = word[0];
+
+    for(Char* child : node->children)
+    {
+        if(ch == child->c)                      // if the char is equal.
+        {
+            if(word.length() <= 1)              // and the lenght is 1
+                return child;                   // means we found every char
+            else 
+                return search(child, word.substr(1));     // otherwise keep searching for other chars
+        }
+    }
+    
+    return nullptr;
+}
+
+
+string Trie::get_completition(Char* node, string word)
+{
+    if(node == nullptr) return word;
+    if(node->children.size() == 0) return word;
+    srand(time(NULL));
+
+    int n = rand() % node->children.size();
+
+    Char* child = node->children.at(n);
+
+    word += child->c;
+
+    if(child->is_end_of_name)
+    {
+        // cout << GREY << word << RESET;
+        return word;
+    }
+
+    return get_completition(child, word);
+
+}
+
+
+void Trie::display_all_completitions(Char* node, string word){
+    
+    if(node == nullptr) return;
+
+    if(node->is_end_of_name){
+        cout << GREEN << word << RESET << endl;
+    }
+
+    for(Char* child : node->children){
+        char c = child->c;
+        display_all_completitions(child, word + c);     // iterate through the children of this node (child)
+    }
+}
+
+void Trie::insert_command(string name){
+    if(name == "") return;
+    Char* current = _root;
+
+    for (char ch : name)                        //* for every char
+    {
+        bool chExists = false;
+    
+        for(Char* child : current->children)
+        {
+            if(child->c == ch){                 //* check if that char already exists
+                chExists = true;            
+                current = child;                //* if yes move to that node
+                break;
+            }
+        }
+
+        if(!chExists){                          //* if not, create a new node and move to it
+            Char* newNode = new Char(ch);
+            current->children.push_back(newNode);
+            current = newNode;
+        }
+    }
+    current->is_end_of_name = true;
 }

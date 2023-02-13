@@ -3,10 +3,11 @@
 
 #include <iostream>
 #include <string>
-#include "utils.h"
+#include "colors.h"
 #include <vector>
 #include <map>
 using namespace std;
+
 
 class Shell{
 
@@ -14,8 +15,6 @@ class Shell{
     string command;
     vector<string> args;
     string path;
-
-    void split_arguments(string args);
 
     map<string, int> cmds;
 
@@ -32,7 +31,9 @@ class Shell{
 
         Shell();
 
-        void wait_for_command();
+        // void wait_for_command();
+        void split_arguments(string args);
+
         inline void command_not_found(){
             cout << RED << "\"" << command << "\" command not found\n" << RESET;
         }
