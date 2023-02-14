@@ -1,4 +1,4 @@
-# Shell and file system simulator<br>![Linux]("https://img.shields.io/badge/-linux-green?style=for-the-badge&logo=cplusplus")<br>
+# Shell and file system simulator<br>![Linux](https://img.shields.io/badge/platform-linux-brightgreen?style=for-the-badge&logo=linux) ![Language](https://img.shields.io/badge/language-C++-red?style=for-the-badge&logo=cplusplus)<br>
 I made this program to practice with tree data structure.<br>
 It's a shell like enviroment where you can manage folders, subfolders and files.<br>
 I also implemented an auto-completition system in real time. To complete a word just press 'tab' key.
