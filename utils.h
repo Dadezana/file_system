@@ -66,6 +66,7 @@ string get_command(Trie* trie){
         ptr = trie->search(trie->_root, command);
         completed_word = trie->get_completition(ptr);
         cout << GREEN << completed_word << RESET;
+        for(int i = 0; i < completed_word.size(); i++) cout << "\b";
     }
 
     return command;
