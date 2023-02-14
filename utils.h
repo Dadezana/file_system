@@ -52,6 +52,13 @@ string get_command(Trie* trie){
             cout << "\n> " << command;
             continue;
         }
+        else if(ch == 127)
+        {
+            if(command.empty()) continue;
+            cout << "\b \b";
+            command.pop_back();
+            continue;
+        }
 
         command += ch;
         cout << "                ";
